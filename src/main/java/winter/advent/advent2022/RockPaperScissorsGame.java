@@ -31,13 +31,32 @@ public class RockPaperScissorsGame {
 
     public static RockPaperScissorsGame loadFromLogLines(List<String> logLines){
         List<Round> log = logLines.stream()
-                .map(logLine -> new Round(Move.fromCharacter(logLine.charAt(2)), Move.fromCharacter(logLine.charAt(0))))
+                .map(logLine -> new Round(Move.fromCharacter(logLine.charAt(0)), Outcome.fromCharacter(logLine.charAt(2))))
                 .collect(Collectors.toList());
         return new RockPaperScissorsGame(log);
     }
 
     public static RockPaperScissorsGame loadFromInputStream(InputStream inputStream){
         return loadFromLogLines(readAllLines(inputStream));
+    }
+
+    public enum Outcome {
+        WIN('Z')  , LOSE('X'), DRAW('Y');
+
+        private final char character;
+
+        Outcome(char character) {
+            this.character = character;
+        }
+
+        public static Outcome fromCharacter(char character){
+            for (Outcome outcome : values()) {
+                if(outcome.character == character){
+                    return outcome;
+                }
+            }
+            throw new IllegalArgumentException("Unknown character: " + character);
+        }
     }
 
     public enum Move {
@@ -69,6 +88,15 @@ public class RockPaperScissorsGame {
             }
         }
 
+        public static Move fromValue(int value) {
+            for (Move move : values()) {
+                if(move.moveValue == value){
+                    return move;
+                }
+            }
+            throw new IllegalArgumentException("Invalid value: " + value);
+        }
+
         public int scoreAgainst(Move opponentMove){
             int score = moveValue;
             if(this.beatsValue == opponentMove.moveValue){
@@ -85,14 +113,30 @@ public class RockPaperScissorsGame {
         private final Move playerMove;
         private final Move opponentMove;
 
+        private final Outcome outcome;
 
-        public Round(Move playerMove, Move opponentMove) {
-            this.playerMove = playerMove;
+
+        public Round(Move opponentMove, Outcome outcome) {
             this.opponentMove = opponentMove;
+            this.outcome = outcome;
+            this.playerMove = calculatePlayerMove(opponentMove, outcome);
         }
 
-        public static Round of(Move playerMove, Move opponentMove){
-            return new Round(playerMove, opponentMove);
+        private Move calculatePlayerMove(Move opponentMove, Outcome outcome) {
+            switch (outcome){
+                case WIN:
+                    return Move.fromValue(opponentMove.losesToValue);
+                case LOSE:
+                    return Move.fromValue(opponentMove.beatsValue);
+                case DRAW:
+                    return opponentMove;
+                default:
+                    throw new IllegalArgumentException("Unknown outcome: " + outcome);
+            }
+        }
+
+        public static Round of(Move opponentMove, Outcome outcome){
+            return new Round(opponentMove, outcome);
         }
 
         public int getScore(){

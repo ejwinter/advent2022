@@ -13,29 +13,29 @@ class RockPaperScissorsGameTest {
     void calculateYourScore_log() {
         RockPaperScissorsGame game = RockPaperScissorsGame.loadFromInputStream(getClass().getResourceAsStream("/d2/rps-strategy-guide.txt"));
         int actual = game.calculateYourScore();
-        assertEquals(13924, actual);
+        assertEquals(13448, actual);
     }
 
     @Test
     void calculateYourScore_single1(){
         RockPaperScissorsGame game = new RockPaperScissorsGame(List.of(
-                of(RockPaperScissorsGame.Move.PAPER, RockPaperScissorsGame.Move.ROCK)
+                of(RockPaperScissorsGame.Move.ROCK, RockPaperScissorsGame.Outcome.DRAW)
         ));
 
         int actual = game.calculateYourScore();
-        assertEquals(8, actual);
+        assertEquals(4, actual);
     }
 
     @Test
     void calculateYourScore_small(){
         RockPaperScissorsGame game = new RockPaperScissorsGame(List.of(
-                of(RockPaperScissorsGame.Move.ROCK, RockPaperScissorsGame.Move.PAPER),
-                of(RockPaperScissorsGame.Move.PAPER, RockPaperScissorsGame.Move.ROCK),
-                of(RockPaperScissorsGame.Move.SCISSORS, RockPaperScissorsGame.Move.SCISSORS)
+                of(RockPaperScissorsGame.Move.ROCK, RockPaperScissorsGame.Outcome.DRAW),
+                of(RockPaperScissorsGame.Move.PAPER, RockPaperScissorsGame.Outcome.LOSE),
+                of(RockPaperScissorsGame.Move.SCISSORS, RockPaperScissorsGame.Outcome.WIN)
         ));
 
         int actual = game.calculateYourScore();
-        assertEquals(15, actual);
+        assertEquals(12, actual);
     }
 
 }
