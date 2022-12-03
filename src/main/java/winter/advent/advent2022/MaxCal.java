@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 public class MaxCal {
 
-    public MaxCal(List<List<Integer>> elfRations) {
+    final List<List<Integer>> elfRations;
+
+    private MaxCal(List<List<Integer>> elfRations) {
         this.elfRations = elfRations;
     }
-
-    final List<List<Integer>> elfRations;
 
     public int calculateMaxElfCals() {
         return elfRations.stream()
@@ -35,9 +35,15 @@ public class MaxCal {
                 .mapToInt(Integer::intValue).sum();
     }
 
-
-    private static MaxCal load(List<String> logLines){
-        List<List<Integer>> logLinesByElf = new LinkedList<>();
+    /**
+     * Loads from the lines of a ration calorie log where:
+     *   - each line is an integer representing the calories of a ration for an elf
+     *   - different elves are seperated by a blank line
+     * @param logLines the lines for the ration log
+     * @return a MaxCal object that can be used to calculate using the ration log
+     */
+    public static MaxCal loadFromLogLines(List<String> logLines){
+        final List<List<Integer>> logLinesByElf = new LinkedList<>();
         List<Integer> currentElf = new LinkedList<>();
         for (String logLine : logLines) {
             if(logLine.trim().isEmpty()) {
@@ -55,11 +61,11 @@ public class MaxCal {
         return new MaxCal(logLinesByElf);
     }
 
-    public static MaxCal load(InputStream inputStream) {
-        return load(readLines(inputStream));
+    public static MaxCal loadFromInputStream(InputStream logStream) {
+        return loadFromLogLines(readAllLines(logStream));
     }
 
-    private static List<String> readLines(InputStream inputStream) {
+    private static List<String> readAllLines(InputStream inputStream) {
         try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             return bufferedReader.lines().collect(Collectors.toList());
         } catch (Exception e) {
