@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MaxCal {
+public class ElfTroopCalorieLog {
 
     final List<List<Integer>> elfRations;
 
-    private MaxCal(List<List<Integer>> elfRations) {
+    private ElfTroopCalorieLog(List<List<Integer>> elfRations) {
         this.elfRations = elfRations;
     }
 
@@ -42,7 +42,7 @@ public class MaxCal {
      * @param logLines the lines for the ration log
      * @return a MaxCal object that can be used to calculate using the ration log
      */
-    public static MaxCal loadFromLogLines(List<String> logLines){
+    public static ElfTroopCalorieLog loadFromLogLines(List<String> logLines){
         final List<List<Integer>> logLinesByElf = new LinkedList<>();
         List<Integer> currentElf = new LinkedList<>();
         for (String logLine : logLines) {
@@ -58,10 +58,10 @@ public class MaxCal {
         if(!currentElf.isEmpty()) {
             logLinesByElf.add(currentElf);
         }
-        return new MaxCal(logLinesByElf);
+        return new ElfTroopCalorieLog(logLinesByElf);
     }
 
-    public static MaxCal loadFromInputStream(InputStream logStream) {
+    public static ElfTroopCalorieLog loadFromInputStream(InputStream logStream) {
         return loadFromLogLines(readAllLines(logStream));
     }
 

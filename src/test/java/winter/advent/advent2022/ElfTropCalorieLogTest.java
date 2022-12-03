@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MaxCalTest {
+class ElfTropCalorieLogTest {
 
         @Test
         void calculateMaxElfCals() {
-            MaxCal maxCal = MaxCal.loadFromInputStream(getClass().getResourceAsStream("/d1/d1-input.txt"));
+            ElfTroopCalorieLog maxCal = ElfTroopCalorieLog.loadFromInputStream(getClass().getResourceAsStream("/d1/d1-input.txt"));
             int actual = maxCal.calculateMaxElfCals();
             System.out.println("Max calories of an elf = " + actual);
             assertEquals(67622, actual);
@@ -16,7 +16,7 @@ class MaxCalTest {
 
         @Test
         void calculateCalsOfTopThreeElves() {
-            MaxCal maxCal = MaxCal.loadFromInputStream(getClass().getResourceAsStream("/d1/d1-input.txt"));
+            ElfTroopCalorieLog maxCal = ElfTroopCalorieLog.loadFromInputStream(getClass().getResourceAsStream("/d1/d1-input.txt"));
             int actual = maxCal.calculateCalsOfTopThreeElves();
             System.out.println("Max calories of top 3 elves = " + actual);
             assertEquals(201491, actual);
