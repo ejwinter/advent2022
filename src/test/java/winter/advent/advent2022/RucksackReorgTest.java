@@ -40,4 +40,24 @@ class RucksackReorgTest {
         assertEquals(7889, rucksackReorg.getTotalPriority());
     }
 
+    @Test
+    void getGroupPrioritySmall(){
+        RucksackReorg rucksackReorg = new RucksackReorg(
+                RucksackReorg.Rucksack.fromString("vJrwpWtwJgWrhcsFMMfFFhFp"),
+                RucksackReorg.Rucksack.fromString("jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"),
+                RucksackReorg.Rucksack.fromString("PmmdzqPrVvPwwTWBwg"),
+                RucksackReorg.Rucksack.fromString("wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"),
+                RucksackReorg.Rucksack.fromString("ttgJtRGJQctTZtZT"),
+                RucksackReorg.Rucksack.fromString("CrZsJsPPZsGzwwsLwLmpwMDw")
+        );
+
+        assertEquals(18, rucksackReorg.getGroups().get(0).getTotalPriority());
+    }
+
+    @Test
+    void getGroupPriorityReal(){
+        RucksackReorg rucksackReorg = RucksackReorg.loadFromInputStream(getClass().getResourceAsStream("/d3/rucksack-reorg.txt"));
+        assertEquals(2825, rucksackReorg.getGroupPriority());
+    }
+
 }
