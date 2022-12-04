@@ -3,14 +3,14 @@ package winter.advent.advent2022;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static winter.advent.advent2022.IOUtils.listAllLines;
 
 @AllArgsConstructor
 public class CampCleanup {
@@ -36,9 +36,10 @@ public class CampCleanup {
     }
 
     public static CampCleanup loadFromInputStream(InputStream inputStream) {
-        List<Pairing> pairings = readAllLines(inputStream).stream()
+        List<Pairing> pairings = listAllLines(inputStream).stream()
                 .map(Pairing::fromString)
                 .collect(Collectors.toList());
+
         return new CampCleanup(pairings);
     }
 
@@ -83,12 +84,4 @@ public class CampCleanup {
         }
     }
 
-
-    private static List<String> readAllLines(InputStream inputStream) {
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return bufferedReader.lines().collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

@@ -1,11 +1,10 @@
 package winter.advent.advent2022;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static winter.advent.advent2022.IOUtils.listAllLines;
 
 public class ElfTroopCalorieLog {
 
@@ -62,14 +61,6 @@ public class ElfTroopCalorieLog {
     }
 
     public static ElfTroopCalorieLog loadFromInputStream(InputStream logStream) {
-        return loadFromLogLines(readAllLines(logStream));
-    }
-
-    private static List<String> readAllLines(InputStream inputStream) {
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return bufferedReader.lines().collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return loadFromLogLines(listAllLines(logStream));
     }
 }

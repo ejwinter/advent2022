@@ -38,7 +38,7 @@ public class RucksackReorg {
     }
 
     public static RucksackReorg loadFromInputStream(InputStream inputStream) {
-        List<Rucksack> rucksacks = readAllLines(inputStream).stream()
+        List<Rucksack> rucksacks = IOUtils.listAllLines(inputStream).stream()
                 .map(Rucksack::fromString)
                 .collect(Collectors.toList());
         return new RucksackReorg(rucksacks);
@@ -123,15 +123,6 @@ public class RucksackReorg {
         private final String items;
 
     }
-
-    private static List<String> readAllLines(InputStream inputStream) {
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return bufferedReader.lines().collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     public static int priority(char c) {
         if (c > 91) {

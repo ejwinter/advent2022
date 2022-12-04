@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static winter.advent.advent2022.IOUtils.listAllLines;
+
 @Getter
 public class RockPaperScissorsGame {
 
@@ -37,7 +39,7 @@ public class RockPaperScissorsGame {
     }
 
     public static RockPaperScissorsGame loadFromInputStream(InputStream inputStream){
-        return loadFromLogLines(readAllLines(inputStream));
+        return loadFromLogLines(listAllLines(inputStream));
     }
 
     public enum Outcome {
@@ -148,13 +150,5 @@ public class RockPaperScissorsGame {
         }
 
 
-    }
-
-    private static List<String> readAllLines(InputStream inputStream) {
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return bufferedReader.lines().collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
