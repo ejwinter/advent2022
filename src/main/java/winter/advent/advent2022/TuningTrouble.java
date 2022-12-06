@@ -1,6 +1,5 @@
 package winter.advent.advent2022;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -12,11 +11,12 @@ import java.util.stream.Stream;
 
 public class TuningTrouble {
 
-    @AllArgsConstructor @Getter @Setter @Accessors(chain = true)
+    @Getter @Setter @Accessors(chain = true)
     public static class Datastream {
         private final String content;
 
-        private int minStartSize = 4;
+        private int minPacketMarkerSize = 4;
+        private int minMessageMarkerSize = 14;
 
         public Datastream(String content) {
             this.content = content;
@@ -26,14 +26,22 @@ public class TuningTrouble {
             return new Datastream(String.join("", IOUtils.listAllLines(content)));
         }
 
-        public Stream<Integer> findStartOfPacketIndices() {
+        public Stream<Integer> findPacketMarkers(){
+            return findStreamMarker(minPacketMarkerSize);
+        }
+
+        public Stream<Integer> findMessageMarkers(){
+            return findStreamMarker(minMessageMarkerSize);
+        }
+
+        public Stream<Integer> findStreamMarker(int minWindowSize) {
 
             return IntStream.range(0, content.length())
                     .filter(i -> {
-                        if(i < minStartSize) {
+                        if(i < minWindowSize) {
                             return false;
                         }
-                        return minStartSize == IntStream.range(0, minStartSize)
+                        return minWindowSize == IntStream.range(0, minWindowSize)
                                 .mapToObj(j -> content.charAt(i-j))
                                 .collect(Collectors.toSet())
                                 .size();

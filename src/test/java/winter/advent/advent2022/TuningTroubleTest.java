@@ -8,24 +8,23 @@ class TuningTroubleTest {
 
     @Test
     public void testFindStartOfPacketIndices_short() {
-        assertEquals(5, new TuningTrouble.Datastream("bvwbjplbgvbhsrlpgdmjqwftvncz").findStartOfPacketIndices().findFirst().orElseThrow());
-        assertEquals(6, new TuningTrouble.Datastream("nppdvjthqldpwncqszvftbrmjlhg").findStartOfPacketIndices().findFirst().orElseThrow());
-        assertEquals(10, new TuningTrouble.Datastream("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg").findStartOfPacketIndices().findFirst().orElseThrow());
-        assertEquals(11, new TuningTrouble.Datastream("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw").findStartOfPacketIndices().findFirst().orElseThrow());
+        assertEquals(5, new TuningTrouble.Datastream("bvwbjplbgvbhsrlpgdmjqwftvncz").findPacketMarkers().findFirst().get());
+        assertEquals(6, new TuningTrouble.Datastream("nppdvjthqldpwncqszvftbrmjlhg").findPacketMarkers().findFirst().get());
+        assertEquals(10, new TuningTrouble.Datastream("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg").findPacketMarkers().findFirst().get());
+        assertEquals(11, new TuningTrouble.Datastream("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw").findPacketMarkers().findFirst().get());
     }
 
     @Test
     public void testFindStartOfPacketIndices_long() {
         assertEquals(1655, TuningTrouble.Datastream.fromStream(getClass().getResourceAsStream("/d6/tuning-trouble.txt"))
-                .findStartOfPacketIndices().findFirst().orElseThrow());
+                .findStreamMarker(4).findFirst().get());
     }
 
     @Test
     public void testFindStartOfPacketIndices_long_messages() {
         assertEquals(2665, TuningTrouble.Datastream.fromStream(getClass().getResourceAsStream("/d6/tuning-trouble.txt"))
-                .setMinStartSize(14)
-                .findStartOfPacketIndices()
-                .findFirst().orElseThrow());
+                .findMessageMarkers()
+                .findFirst().get());
     }
 
 }
