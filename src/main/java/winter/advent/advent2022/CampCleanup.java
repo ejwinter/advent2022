@@ -23,7 +23,7 @@ public class CampCleanup {
 
     public Set<ElfAssignments> getRedundentElfAssignments() {
         return pairings.stream()
-                .map(pairing -> pairing.fullyRedundant())
+                .map(Pairing::fullyRedundant)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
