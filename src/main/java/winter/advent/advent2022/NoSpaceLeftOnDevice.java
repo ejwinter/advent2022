@@ -1,6 +1,5 @@
 package winter.advent.advent2022;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
