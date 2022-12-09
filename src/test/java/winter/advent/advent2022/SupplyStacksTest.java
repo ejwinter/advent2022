@@ -10,7 +10,7 @@ class SupplyStacksTest {
 
     @Test
     void loadFromInputStream(){
-        SupplyStacks supplyStacks = SupplyStacks.loadFromInputStream(getClass().getResourceAsStream("/d5/supply-stacks.txt"));
+        SupplyStacks supplyStacks = SupplyStacks.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/supply-stacks.txt"));
         assertEquals(9, supplyStacks.getShip().getStacks().size());
         assertEquals("9: TFBNQLH", supplyStacks.getShip().getStacks().get(8).toString());
         assertEquals("WQJBBLMJT", supplyStacks.getShip().getAllTopCrates().stream().map(SupplyStacks.Crate::toString).collect(Collectors.joining("")));
@@ -18,7 +18,7 @@ class SupplyStacksTest {
 
     @Test
     void runMovementLog(){
-        SupplyStacks supplyStacks = SupplyStacks.loadFromInputStream(getClass().getResourceAsStream("/d5/supply-stacks.txt"));
+        SupplyStacks supplyStacks = SupplyStacks.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/supply-stacks.txt"));
         supplyStacks.getShip().runMovementLog();
         assertEquals(9, supplyStacks.getShip().getStacks().size());
         assertEquals("9: BH", supplyStacks.getShip().getStacks().get(8).toString());
@@ -27,7 +27,7 @@ class SupplyStacksTest {
 
     @Test
     void runMovementLog_multilift(){
-        SupplyStacks supplyStacks = SupplyStacks.loadFromInputStream(getClass().getResourceAsStream("/d5/supply-stacks.txt"));
+        SupplyStacks supplyStacks = SupplyStacks.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/supply-stacks.txt"));
         System.out.println("Before:\n" + supplyStacks.getShip());
         supplyStacks.getShip().setMultilift(true).runMovementLog();
         assertEquals(9, supplyStacks.getShip().getStacks().size());

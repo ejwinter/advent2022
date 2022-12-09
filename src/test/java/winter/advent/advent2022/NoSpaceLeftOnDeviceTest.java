@@ -2,7 +2,6 @@ package winter.advent.advent2022;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +12,7 @@ class NoSpaceLeftOnDeviceTest {
     @Test
     void fromListing(){
 
-        NoSpaceLeftOnDevice.Directory root = NoSpaceLeftOnDevice.Directory.fromStream(getClass().getResourceAsStream("/d7/short-listing.txt"));
+        NoSpaceLeftOnDevice.Directory root = NoSpaceLeftOnDevice.Directory.fromStream(getClass().getResourceAsStream("/inputfiles/short-listing.txt"));
         assertEquals(48_381_165, root.getTotalSize());
         Set<NoSpaceLeftOnDevice.Directory> directoriesOfMaxSize = root.findDirectoriesOfMaxSize(100_000);
         assertEquals(2, directoriesOfMaxSize.size());
@@ -25,7 +24,7 @@ class NoSpaceLeftOnDeviceTest {
     @Test
     void fromListing_long(){
 
-        NoSpaceLeftOnDevice.Directory root = NoSpaceLeftOnDevice.Directory.fromStream(getClass().getResourceAsStream("/d7/long-listing.txt"));
+        NoSpaceLeftOnDevice.Directory root = NoSpaceLeftOnDevice.Directory.fromStream(getClass().getResourceAsStream("/inputfiles/long-listing.txt"));
         assertEquals(43_629_016, root.getTotalSize());
         Set<NoSpaceLeftOnDevice.Directory> directoriesOfMaxSize = root.findDirectoriesOfMaxSize(100_000);
         assertEquals(40, directoriesOfMaxSize.size());

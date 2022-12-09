@@ -1,89 +1,119 @@
 package winter.advent.advent2022;
 
+import lombok.Getter;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.lang.Math.abs;
 
+@Getter
 public class RopeBridge {
-    private final int[] start = new int[]{0,0};
-    private final int[] headLocation = new int[]{0, 0};
-    private final int[] tailLocation = new int[]{0, 0};
+    private final List<Knot> knots;
+    private final List<Move> movesToMake = new LinkedList<>();
 
-    private final List<Move> headMoveLog;
-
-    private final List<Location> tailPositionLog = new LinkedList<>();
-
-    public static RopeBridge fromLines(List<String> lines) {
+    public static RopeBridge fromLines(int knotCount, List<String> lines) {
         List<Move> moves = lines.stream()
                 .map(l -> l.split(" "))
                 .map(s -> new Move(Direction.valueOf(s[0]), Integer.parseInt(s[1])))
                 .toList();
-        return new RopeBridge(moves);
+        return new RopeBridge(knotCount, moves);
     }
 
-    public RopeBridge(List<Move> moves) {
-        this.headMoveLog = moves;
+    public RopeBridge(int knotCount, List<Move> moves) {
+        this.movesToMake.addAll(moves);
+        this.knots = IntStream.range(0, knotCount)
+                .mapToObj(i -> new Knot(new Location(0,0)))
+                .toList();
     }
 
-    public void run(){
-        headMoveLog.forEach(this::makeMove);
+    public RopeBridge run(){
+        movesToMake.stream()
+                .flatMap(Move::decompose)
+                .forEach(move -> {
+                    Knot headKnot = knots.get(0).move(move);
+                    knots.stream().skip(1)
+                            .reduce(headKnot, (k1, k2) -> k2.moveTowards(k1));
+                });
+        return this;
     }
 
-    public Set<Location> getDistinctTailPositions(){
-        System.out.println(tailPositionLog.size());
-        return Set.copyOf(tailPositionLog);
+    Set<Location> getDistinctTailLocations(){
+        return Set.copyOf(getTailLocations());
     }
 
-    public void makeMove(Move move){
-        for(int step = move.distance; step > 0; step--) {
+    List<Location> getTailLocations(){
+        return knots.get(knots.size()-1).locationHistory;
+    }
 
-            headLocation[0] = headLocation[0] + move.direction.delta[0];
-            headLocation[1] = headLocation[1] + move.direction.delta[1];
+    @Getter
+    public static class Knot {
+        private Location location;
 
-            int[] distance = getDistance();
-            //System.out.println("distance: " + distance[0] + " " + distance[1]);
+        private List<Location> locationHistory = new LinkedList<>();
 
-            final int[] shift = new int[]{0, 0};
-            if(abs(distance[0]) > 1) {
-                if(tailLocation[1] != headLocation[1]) {
-                    tailLocation[1] = headLocation[1];
-                }
-                shift[0] = towards(distance[0]);
-            }
-            if(abs(distance[1]) > 1) {
-                if(tailLocation[0] != headLocation[0]) {
-                    tailLocation[0] = headLocation[0];
-                }
-                shift[1] = towards(distance[1]);
-            }
-            //System.out.println("shift: " + shift[0] + " " + shift[1]);
-            tailLocation[0] = tailLocation[0] + shift[0];
-            tailLocation[1] = tailLocation[1] + shift[1];
-            tailPositionLog.add(new Location(tailLocation[0], tailLocation[1]));
-            System.out.println("Head: " + headLocation[0] + ", " + headLocation[1] + " Tail: " + tailLocation[0] + ", " + tailLocation[1]);
+        public Knot(Location location) {
+            moveTo(location);
         }
-    }
 
-    private int towards(int i) {
-        if(i == 0){
-            return 0;
+        public Knot moveTo(Location location){
+            this.location = location;
+            locationHistory.add(location);
+            return this;
         }
-        return i / abs(i);
-    }
 
+        public Knot moveTowards(Knot k1) {
+            moveTo(location.ifMovedTowards(k1.location));
+            return this;
+        }
 
-    public int[] getDistance(){
-        return new int[]{headLocation[0] - tailLocation[0], headLocation[1] - tailLocation[1]};
+        public Knot move(Move move) {
+            return moveTo(location.ifMoved(move));
+        }
     }
 
     public record Move(Direction direction, int distance) {
 
+        public Stream<Move> decompose(){
+            return IntStream.range(0, distance)
+                    .mapToObj(i -> new Move(direction, 1));
+        }
     }
 
     public record Location(int x, int y) {
 
+        public Location ifMoved(Move move){
+            return ifMoved(move.direction.delta[0] * move.distance, move.direction.delta[1] * move.distance);
+        }
+
+        public Location ifMoved(int xDelta, int yDelta){
+            return new Location(x + xDelta, y + yDelta);
+        }
+
+        public Location ifMovedTowards(Location other){
+
+            int distanceX = other.x - x;
+            int distanceY = other.y - y;
+
+            int newX = x;
+            int newY = y;
+            if(abs(distanceX) > 1) {
+                if(other.y != y) {
+                    newY = other.y;
+                }
+                newX = x + Integer.compare(other.x, x);
+            }
+            if(abs(distanceY) > 1) {
+                if(other.x != x) {
+                    newX = other.x;
+                }
+                newY = y + Integer.compare(other.y, y);
+            }
+            return new Location(newX, newY);
+        }
     }
 
     public enum Direction {

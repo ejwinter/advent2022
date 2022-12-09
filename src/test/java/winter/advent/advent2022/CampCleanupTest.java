@@ -21,7 +21,7 @@ class CampCleanupTest {
 
     @Test
     void fullyRedudentCount_full(){
-        CampCleanup campCleanup = CampCleanup.loadFromInputStream(getClass().getResourceAsStream("/d4/camp-cleanup.txt"));
+        CampCleanup campCleanup = CampCleanup.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/camp-cleanup.txt"));
         assertEquals(569, campCleanup.getRedundentElfAssignments().size());
     }
 
@@ -40,7 +40,7 @@ class CampCleanupTest {
 
     @Test
     void overlappingPairings(){
-        CampCleanup campCleanup = CampCleanup.loadFromInputStream(getClass().getResourceAsStream("/d4/camp-cleanup.txt"));
+        CampCleanup campCleanup = CampCleanup.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/camp-cleanup.txt"));
         assertEquals(936, campCleanup.getOverlappingPairings().size());
     }
 

@@ -18,7 +18,7 @@ class TreetopHouseTest {
             "35390"
     ));
 
-    final TreetopHouse.Grove largeGrove = TreetopHouse.Grove.fromStream(getClass().getResourceAsStream("/d8/grove.txt"));
+    final TreetopHouse.Grove largeGrove = TreetopHouse.Grove.fromStream(getClass().getResourceAsStream("/inputfiles/grove.txt"));
 
     @Test
     public void parserTest(){

@@ -36,7 +36,7 @@ class RucksackReorgTest {
 
     @Test
     void realTest() {
-        RucksackReorg rucksackReorg = RucksackReorg.loadFromInputStream(getClass().getResourceAsStream("/d3/rucksack-reorg.txt"));
+        RucksackReorg rucksackReorg = RucksackReorg.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/rucksack-reorg.txt"));
         assertEquals(7889, rucksackReorg.getTotalPriority());
     }
 
@@ -56,7 +56,7 @@ class RucksackReorgTest {
 
     @Test
     void getGroupPriorityReal(){
-        RucksackReorg rucksackReorg = RucksackReorg.loadFromInputStream(getClass().getResourceAsStream("/d3/rucksack-reorg.txt"));
+        RucksackReorg rucksackReorg = RucksackReorg.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/rucksack-reorg.txt"));
         assertEquals(2825, rucksackReorg.getGroupPriority());
     }
 

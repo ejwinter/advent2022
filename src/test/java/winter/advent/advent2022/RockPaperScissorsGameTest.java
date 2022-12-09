@@ -11,7 +11,7 @@ class RockPaperScissorsGameTest {
 
     @Test
     void calculateYourScore_log() {
-        RockPaperScissorsGame game = RockPaperScissorsGame.loadFromInputStream(getClass().getResourceAsStream("/d2/rps-strategy-guide.txt"));
+        RockPaperScissorsGame game = RockPaperScissorsGame.loadFromInputStream(getClass().getResourceAsStream("/inputfiles/rps-strategy-guide.txt"));
         int actual = game.calculateYourScore();
         assertEquals(13448, actual);
     }
