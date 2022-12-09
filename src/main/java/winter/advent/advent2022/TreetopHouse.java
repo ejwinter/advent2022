@@ -57,12 +57,12 @@ public class TreetopHouse {
 
         public Tree mostScenicTree(){
             return streamTrees()
-                    .reduce((tree1, tree2) -> tree1.calcScenicScore() > tree2.calcScenicScore() ? tree1 : tree2)
-                    .orElseThrow();
+                    .reduce((tree1, tree2) -> tree1.calcScenicScore() >= tree2.calcScenicScore() ? tree1 : tree2)
+                    .orElseThrow(() -> new IllegalStateException("No trees found"));
         }
 
         public Stream<Tree> visibleTrees(){
-            return streamTrees().filter(tree -> !tree.visibleOnPaths().isEmpty());
+            return streamTrees().filter(tree -> !tree.outwardlyVisiblePath().isEmpty());
         }
 
         @Override
@@ -96,10 +96,18 @@ public class TreetopHouse {
                 return getHeight() > other.getHeight();
             }
 
+            /**
+             * Looks along all paths to edges and finds how many trees are visible from this tree, if a tree is the same height as this one
+             * it is the last one we can see in that path.  We add 1
+             * @return
+             */
             public long calcScenicScore(){
                 return pathsToEdges().entrySet().stream()
                         .mapToLong(entry -> {
-                            return entry.getValue().skip(1)
+                            return entry.getValue().skip(1) // skip this tree which is the first one in the path
+                                    // takeWhile I learned of only a couple days ago, very powerful addition thanks to #AdventOfCode!
+                                    // we can only trees as far as the last one that is shorter than us and we must include that last one
+                                    // we also cut it short to not add one for the edge tree.
                                     .takeWhile(t -> this.getHeight() > t.getHeight() && t.getNeighbor(entry.getKey()) != null)
                                     .count() + 1;
                         })
@@ -115,17 +123,23 @@ public class TreetopHouse {
                 );
             }
 
-            public Map<Direction, Stream<Tree>> visibleOnPaths() {
+            public Map<Direction, Stream<Tree>> outwardlyVisiblePath() {
                 return pathsToEdges().entrySet().stream()
                         .filter(entry -> {
                             return entry.getValue()
                                     .skip(1)
-                                    .allMatch(other -> this.isTallerThan(other));
+                                    .allMatch(this::isTallerThan);
                         })
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             }
 
+            /**
+             * Finds all trees including this one in the given direction up until the edge (no next tree)
+             * @param direction we are heading from this tree
+             * @return the stream of trees in the given direction until the edge of the grove
+             */
             private Stream<Tree> pathToEdge(Direction direction) {
+                // this was new to me and a very powerful replacement for some things I thought needed foreach loop
                 return Stream.iterate(this, Objects::nonNull, tree -> tree.getNeighbor(direction));
             }
 

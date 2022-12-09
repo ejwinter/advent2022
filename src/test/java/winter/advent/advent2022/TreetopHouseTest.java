@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,7 +62,7 @@ class TreetopHouseTest {
 
         var tree = grove.getTree(1, 1);
 
-        var directionStreamMap = tree.visibleOnPaths();
+        var directionStreamMap = tree.outwardlyVisiblePath();
         assertEquals(Set.of(TreetopHouse.Direction.UP, TreetopHouse.Direction.LEFT), directionStreamMap.keySet());
     }
 
@@ -73,7 +71,7 @@ class TreetopHouseTest {
 
         var tree = grove.getTree(0, 1);
 
-        var directionStreamMap = tree.visibleOnPaths();
+        var directionStreamMap = tree.outwardlyVisiblePath();
         assertEquals(Set.of(TreetopHouse.Direction.UP), directionStreamMap.keySet());
     }
 
